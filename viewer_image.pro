@@ -1,4 +1,4 @@
-QT += quick widgets
+QT += quick widgets core
 
 CONFIG += c++11
 

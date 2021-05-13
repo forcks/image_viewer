@@ -21,6 +21,8 @@ int main(int argc, char *argv[])
 
 
     AppEngine appEngine;
+
+
     engine.rootContext()->setContextProperty(QStringLiteral("appengine"),&appEngine);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -32,6 +34,8 @@ int main(int argc, char *argv[])
 
     engine.load(url);
 
+    appEngine.loadWindowsSize(appEngine.XSizeWindow(),appEngine.YSizeWindow());
+
     if(argv[2] != nullptr){
         if(argv[1] == QStringLiteral("-f")){
             appEngine.showPathToImage(argv[2]);
@@ -39,10 +43,9 @@ int main(int argc, char *argv[])
         if(argv[1] == QStringLiteral("-a")){
             QString pathPwd = "";
             QString command = "pwd > "+QDir::homePath()+"/pwd.txt";
-            qDebug()<<command;
             QByteArray comm = command.toUtf8();
             system(comm);
-            QFile pwd("pwd.txt");
+            QFile pwd(QDir::homePath()+"/pwd.txt");
             if ((pwd.exists())&&(pwd.open(QIODevice::ReadOnly)))
             {
                 pathPwd = pwd.readLine(0);

@@ -10,6 +10,14 @@ Window {
     visible: true
     title: qsTr("Image viewer")
 
+    Connections{
+        target: appengine
+        function onLoadWindowsSize(x,y) {
+            _root.width = x
+            _root.height = y
+        }
+    }
+
     property var _pathToImage: "default"
     StackView{
         id:_mainStackView
@@ -97,17 +105,65 @@ Window {
         id:_settingsPage
         visible: false
         anchors.fill: parent
-        Rectangle{
-            anchors.top: parent.top
+
+        Text {
+            id: _textStartSize
+            text: qsTr("Window size when opened : ")
+            font.pointSize: (_root.width+_root.height)/80
+        }
+        Text {
+            id:_xText
+            text: qsTr("X: ")
+            font.pointSize: (_root.width+_root.height)/60
             anchors.left: parent.left
+            anchors.top: _textStartSize.bottom
+            anchors.margins: (_root.width+_root.height)/200
+        }
+
+        Rectangle{
+            id:_xSize
+            anchors.top: _textStartSize.bottom
+            anchors.left: _xText.right
             anchors.margins: (_root.width+_root.height)/200
             width: _root.width/5
             height: _root.height/15
             color:"#BFBFBF"
             radius: (_root.width+_root.height)/200
             TextInput{
+                id:_xSizeInput
                 anchors.fill: parent
+                horizontalAlignment: Text.AlignHCenter
+                maximumLength: 5
                 font.pointSize: (_root.width+_root.height)/70
+                validator: IntValidator {bottom: 1; top: 100000} //numbers only
+            }
+        }
+
+        Text {
+            id:_yText
+            text: qsTr("Y: ")
+            font.pointSize: (_root.width+_root.height)/60
+            anchors.left: _xSize.right
+            anchors.top: _textStartSize.bottom
+            anchors.margins: (_root.width+_root.height)/200
+        }
+
+        Rectangle{
+            id:_ySize
+            anchors.top: _textStartSize.bottom
+            anchors.left: _yText.right
+            anchors.margins: (_root.width+_root.height)/200
+            width: _root.width/5
+            height: _root.height/15
+            color:"#BFBFBF"
+            radius: (_root.width+_root.height)/200
+            TextInput{
+                id:_ySizeInput
+                anchors.fill: parent
+                horizontalAlignment: Text.AlignHCenter
+                maximumLength: 5
+                font.pointSize: (_root.width+_root.height)/70
+                validator: IntValidator {bottom: 1; top: 100000} //numbers only
             }
         }
 
@@ -121,6 +177,32 @@ Window {
             text: qsTr("back")
             onClicked: {
                 _mainStackView.pop(_mainPage)
+            }
+        }
+
+        Button{
+            id:_deleteConfig
+            anchors.right: _confirmButton.left
+            anchors.bottom: parent.bottom
+            anchors.margins: (_root.width+_root.height)/200
+            width: _root.width/9
+            height: _root.height/20
+            text: qsTr("throw off")
+            onClicked: {
+                appengine.deleteConfig();
+            }
+        }
+
+        Button{
+            id:_confirmButton
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.margins: (_root.width+_root.height)/200
+            width: _root.width/9
+            height: _root.height/20
+            text: qsTr("confirm")
+            onClicked: {
+                appengine.saveSizeWindowWhenOpened(_xSizeInput.text,_ySizeInput.text);
             }
         }
     }
