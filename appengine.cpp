@@ -60,7 +60,7 @@ QString AppEngine::XSizeWindow(){
     QJsonObject LoJsonObj;
     LoJsonObj = json.object();
     QJsonValue val = LoJsonObj["Sizewindow"];
-    return val["x"].toString() == "" || val["x"].toString() == "0"?val["x"].toString() : "640";
+    return val["x"].toString() != "" && val["x"].toString() != "0"?val["x"].toString() : "640";
 }
 QString AppEngine::YSizeWindow(){
     QJsonDocument json = loadJson(QDir::homePath()+"/config.json");
@@ -69,7 +69,7 @@ QString AppEngine::YSizeWindow(){
     LoJsonObj = json.object();
     QJsonValue val = LoJsonObj["Sizewindow"];
 
-    return val["y"].toString() == "" || val["y"].toString() == "0"?val["y"].toString() : "480";
+    return val["y"].toString() != "" && val["y"].toString() != "0"?val["y"].toString() : "480";
 }
 
 void AppEngine::deleteConfig(){
