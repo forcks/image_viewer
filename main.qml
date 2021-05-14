@@ -79,6 +79,10 @@ Window {
                 }
             }
         }*/
+
+
+
+
         Button{
             id:_searchImage
             anchors.right: parent.right
@@ -92,13 +96,45 @@ Window {
                 imageDialogLoad.open()
             }
         }
+
+        Button{
+            id:_nextButton
+            anchors.right: _searchImage.left
+            anchors.top: _image.bottom
+            width: _root.width/9
+            height: _root.height/20
+            anchors.margins: (_root.width+_root.height)/200
+            text: qsTr(">")
+            onClicked: {
+                appengine.nextImage();
+            }
+        }
+
+        Button{
+            id:_prevousButton
+            anchors.right: _nextButton.left
+            anchors.top: _image.bottom
+            width: _root.width/9
+            height: _root.height/20
+            anchors.margins: (_root.width+_root.height)/200
+            text: qsTr("<")
+            onClicked: {
+                appengine.previousImage();
+            }
+        }
+
+
+
         FileDialog {
             id: imageDialogLoad
             folder: "."
             title: "Choose a file to open"
             selectMultiple: false
             nameFilters: [ "Image files (*.png *.jpg *.jpeg *.raw *.tiff *.jp2 *.gif)", "All files (*)" ]
-            onAccepted: { _pathToImage =  imageDialogLoad.fileUrl }
+            onAccepted: {
+                _pathToImage =  imageDialogLoad.fileUrl
+                appengine.setFolderPath(imageDialogLoad.folder,imageDialogLoad.fileUrl)
+            }
         }
     }
     Page{
